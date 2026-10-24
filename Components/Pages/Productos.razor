@@ -1,0 +1,80 @@
+﻿@page "/productos"
+@rendermode InteractiveServer
+<h1>Gestión de Productos</h1>
+
+<div class="mb-3">
+    <label>Nombre</label>
+    <input class="form-control" @bind-value="nombre" />
+</div>
+
+<div class="mb-3">
+    <label>Precio</label>
+    <input class="form-control" type="number" @bind-value="precio" />
+</div>
+
+<button class="btn btn-primary" @onclick="AgregarProducto">
+    Agregar Producto
+</button>
+<p>Productos registrados: @productos.Count</p>
+<hr />
+
+<h3>Lista de Productos</h3>
+<p>Nombre actual: @nombre</p>
+<p>Precio actual: @precio</p>
+<p>Productos registrados: @productos.Count</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var producto in productos)
+        {
+            <tr>
+                <td>@producto.Nombre</td>
+                <td>₡@producto.Precio</td>
+                <td>
+                    <button class="btn btn-danger btn-sm"
+                            @onclick="() => EliminarProducto(producto)">
+                        Eliminar
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+
+    private string nombre = "";
+    private decimal precio;
+
+    private List<Producto> productos = new();
+
+    private void AgregarProducto()
+    {
+        Console.WriteLine("Botón presionado");
+
+        productos.Add(new Producto
+        {
+            Nombre = nombre,
+            Precio = precio
+        });
+
+        nombre = "";
+        precio = 0;
+
+        StateHasChanged();
+    }
+
+    class Producto
+    {
+        public string Nombre { get; set; } = "";
+        public decimal Precio { get; set; }
+    }
+
+    private void EliminarProducto(Producto producto) => productos.Remove(producto);
+}
